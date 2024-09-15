@@ -8,6 +8,7 @@ phases:
   install:
     commands:
       - echo "entered the installed phase"
+      - npm install
       
   pre_build:
     commands:
@@ -15,11 +16,19 @@ phases:
       - echo "Settings"
       - echo "Action Firm"
       - echo "RUnning Test"
+      - npm run lint
       
   build:
     commands:
       - echo "Hello World"
-      - echo "In your mind now, you are building the application"
+      - |
+        COVERAGE=$(npx jest --coverage --silent --json --outputFile=coverage/coverage-summary.json && cat coverage/coverage-summary.json | jq .total.lines.pct)
+        if (( $(echo "$COVERAGE < 0" | bc -l) )); then
+          echo "Code coverage is below 0%"
+          exit 1
+        fi
+        echo "Code coverage is $COVERAGE%"
+
   post_build:
     commands:
       - echo "entered the post-Build phase"
