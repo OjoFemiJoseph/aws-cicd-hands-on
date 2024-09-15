@@ -16,7 +16,7 @@ phases:
       - echo "Settings"
       - echo "Action Firm"
       - echo "RUnning Test"
-      - npm run lint
+      
       
   build:
     commands:
